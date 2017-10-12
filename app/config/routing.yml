@@ -5,3 +5,7 @@ app:
 users:
     type:     rest
     resource: AppBundle\Controller\UserController
+
+tasks:
+    type:     rest
+    resource: AppBundle\Controller\TaskController

@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Tasks
  *
  * @ORM\Table(name="task", indexes={@ORM\Index(name="fk_tasks_users", columns={"user_id"})})
  * @ORM\Entity
+ * @JMS\ExclusionPolicy("none")
  */
 class Task
 {
@@ -18,6 +20,7 @@ class Task
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Exclude()
      */
     private $id;
 
