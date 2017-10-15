@@ -1,0 +1,11 @@
+login:
+    type: rest
+    resource: "@AppBundle/Controller/JWTLoginController.php"
+
+users:
+    type:     rest
+    resource: "@AppBundle/Controller/UserController.php"
+
+tasks:
+    type:     rest
+    resource: "@AppBundle/Controller/TaskController.php"

@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 
 /**
  * Users
@@ -12,7 +13,7 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @JMS\ExclusionPolicy("none")
  */
-class User
+class User implements JWTUserInterface
 {
     /**
      * @var integer
@@ -206,6 +207,44 @@ class User
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function createFromPayload($username, array $payload)
+    {
+        // TODO: Implement createFromPayload() method.
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+       return [$this->getRole()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
 }
 

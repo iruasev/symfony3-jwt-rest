@@ -8,17 +8,16 @@ security:
             memory: ~
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+        api_login:
+            pattern: ^/api/login
             security: false
+        api:
+            pattern:   ^/api
+            stateless: true
+            security: true
+            guard:
+                authenticators:
+                    - 'jwt_token_authenticator'
 
-        main:
-            anonymous: ~
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
