@@ -6,14 +6,16 @@ use Doctrine\ORM\EntityManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{
+    JsonResponse, Response, Request
+};
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\{
+    AuthenticationException, CustomUserMessageAuthenticationException
+};
+use Symfony\Component\Security\Core\User\{
+    UserInterface, UserProviderInterface
+};
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class JwtTokenAuthenticator extends AbstractGuardAuthenticator
@@ -31,12 +33,12 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
      * JwtTokenAuthenticator constructor.
      *
      * @param JWTEncoderInterface $jwtEncoder
-     * @param EntityManager $em
+     * @param EntityManager       $em
      */
     public function __construct(JWTEncoderInterface $jwtEncoder, EntityManager $em)
     {
         $this->jwtEncoder = $jwtEncoder;
-        $this->em = $em;
+        $this->em         = $em;
     }
 
     /**
@@ -44,14 +46,11 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        $extractor = new AuthorizationHeaderTokenExtractor(
-            '',
-            'Authorization'
-        );
+        $extractor = new AuthorizationHeaderTokenExtractor('', 'Authorization');
 
         $token = $extractor->extract($request);
 
-        if(! $token){
+        if (! $token) {
             return null;
         }
 
@@ -64,17 +63,17 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         try {
-        /*
-         * $data is now an array of whatever information we originally put into the token.
-         * Fundamentally, this works just like a normal json_decode, except that
-         * the library is also checking to make sure that the contents of our token weren't changed.
-         * It does this by using our private key.
-         * This guarantees that nobody has changed the username to some other username because they're a jerk.
-         * Encryption is amazing.
-         * It also checks the token's expiration: our tokens last 1 hour because that's what we setup in config.yml
-         */
+            /*
+             * $data is now an array of whatever information we originally put into the token.
+             * Fundamentally, this works just like a normal json_decode, except that
+             * the library is also checking to make sure that the contents of our token weren't changed.
+             * It does this by using our private key.
+             * This guarantees that nobody has changed the username to some other username because they're a jerk.
+             * Encryption is amazing.
+             * It also checks the token's expiration: our tokens last 1 hour because that's what we setup in config.yml
+             */
             $data = $this->jwtEncoder->decode($credentials);
-        } catch(JWTDecodeFailureException $e) {
+        } catch (JWTDecodeFailureException $e) {
             throw new CustomUserMessageAuthenticationException('Invalid Token');
         }
 
@@ -82,9 +81,7 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
         // If user is not found NULL is returned and auth will fail.
         // If user is found SYmfony will call checkCredentials
-        return $this->em
-            ->getRepository(User::class)
-            ->findOneBy(['email' => $email]);
+        return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
     }
 
     /**
