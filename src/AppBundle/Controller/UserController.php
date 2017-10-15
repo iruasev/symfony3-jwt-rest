@@ -9,9 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends FOSRestController
 {
-    /**
-     * @Get("/users")
-     */
+
     public function getUsersAction()
     {
         $data = $this->getDoctrine()->getRepository(User::class)->findAll();
@@ -19,9 +17,6 @@ class UserController extends FOSRestController
         return $this->handleView($this->view($data));
     }
 
-    /**
-     * @Get("/users/{id}")
-     */
     public function getUserAction($id)
     {
         $data = $this->getDoctrine()->getRepository(User::class)->find($id);

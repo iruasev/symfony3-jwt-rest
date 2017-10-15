@@ -1,15 +1,4 @@
-api_login_check:
-    path: /api/login_check
-
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
-    prefix: /api
-
-users:
+api:
+    resource: 'api-routing.yml'
     type:     rest
-    resource: AppBundle\Controller\UserController
-
-tasks:
-    type:     rest
-    resource: AppBundle\Controller\TaskController
+    prefix:   /api
